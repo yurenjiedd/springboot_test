@@ -10,7 +10,6 @@ import com.baomidou.mybatisplus.generator.config.StrategyConfig;
 import com.baomidou.mybatisplus.generator.config.rules.DbType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import org.junit.Test;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 
 /**
@@ -22,7 +21,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class AutoTableBean {
 
     @Test
-    public void test(){
+    public void test() {
 
         AutoGenerator ag = new AutoGenerator();
 
