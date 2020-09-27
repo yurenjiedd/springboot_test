@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Thymeleaf测试</title>
+</head>
+<body>
+
+<!--    <span th:text="'姓名：'+ ${name}">-->
+    <span th:text="|姓名：${name}|"></span><br/>
+    <span th:text="|信息：${msg}|"></span>
+
+    <hr/>
+    <span th:if="${age} == '男'">
+        性别：男
+    </span>
+    <hr/>
+    <span th:if="${age} == '女'">
+        性别：女
+    </span>
+</body>
+</html>

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="true">
+    <!-- 应用名称 -->
+    <property name="APP_NAME" value="yrj_log" />
+    <!--日志文件的保存路径,首先查找系统属性-Dlog.dir,如果存在就使用其；否则，在当前目录下创建名为logs目录做日志存放的目录 -->
+    <property name="LOG_HOME" value="${log.dir:-logs}/${APP_NAME}" />
+    <!-- 日志输出格式 -->
+    <property name="ENCODER_PATTERN"
+              value="%d{yyyy-MM-dd  HH:mm:ss.SSS} [%thread] %-5level %logger{80} - %msg%n" />
+    <contextName>${APP_NAME}</contextName>
+    <!-- 文件最大保存历史数量 -->
+    <property name = "log.maxHistory" value= "30"></property>
+
+    <!-- 控制台日志：输出全部日志到控制台 -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>${ENCODER_PATTERN}</Pattern>
+        </encoder>
+    </appender>
+
+    <!-- 文件日志：输出全部日志到文件   并压缩文件-->
+    <appender name="FILE"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--    输出日志到文件中，不压缩    -->
+        <!--<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            &lt;!&ndash; 输出路径，LOG_HOME:上面定义好的参数  文件名为：output.时间.log&ndash;&gt;
+            <fileNamePattern>${LOG_HOME}/output.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>-->
+
+        <!--    输出日志到文件中，压缩    -->
+        <file>${LOG_HOME}/INFO_Log.log</file>
+        <rollingPolicy name="FILE"
+                       class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_HOME}/error.%d{yyyy-MM-dd}.log.gz</fileNamePattern>
+            <!-- 文件最大保存历史数量 -->
+            <maxHistory>${log.maxHistory}</maxHistory>
+        </rollingPolicy>
+
+        <!--    设置日志文件最大的大小    -->
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>10MB</maxFileSize>
+        </triggeringPolicy>
+
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${ENCODER_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 错误日志：用于将错误日志输出到独立文件 -->
+    <appender name="ERROR_FILE"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_HOME}/errorFile.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${ENCODER_PATTERN}</pattern>
+        </encoder>
+
+        <!--   DEBUG级别
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+             <level>DEBUG</level>
+             <onMatch>ACCEPT</onMatch>
+             <onMismatch>DENY</onMismatch>
+         </filter>
+         -->
+
+        <!--        INFO  级别
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+             <level>INFO</level>
+             <onMatch>ACCEPT</onMatch>
+             <onMismatch>DENY</onMismatch>
+         </filter>
+         -->
+
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <!--     <level>ERROR</level>  错误级别   WARN：警告级别     -->
+            <level>WARN</level>
+        </filter>
+
+    </appender>
+
+    <!-- 独立输出的同步日志 -->
+    <!--<appender name="SYNC_FILE"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_HOME}/sync.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${ENCODER_PATTERN}</pattern>
+        </encoder>
+    </appender>-->
+
+    <!--  指定包或者类的输出logger，这里指定log.sync包输出的日志级别为DEBUG   日志都输出到单独一个文件 -->
+    <!--  addtivity="true"   表示向上级传递日志，也就是说，如果根日志配置的级别高于DEBUG，则它会将日志传递到上级，不会不打印  -->
+    <!--<logger name="com.yrj.log" level="DEBUG" addtivity="true">
+        <appender-ref ref="SYNC_FILE" />
+    </logger>-->
+
+    <!-- 将日志写入数据库 -->
+    <appender name="DB-CLASSIC-MYSQL-POOL" class="ch.qos.logback.classic.db.DBAppender">
+        <connectionSource class="ch.qos.logback.core.db.DataSourceConnectionSource">
+            <dataSource class="org.apache.commons.dbcp.BasicDataSource">
+                <driverClassName>com.mysql.cj.jdbc.Driver</driverClassName>
+                <url>jdbc:mysql://localhost:3306/my_log?characterEncoding=UTF-8&amp;serverTimezone=GMT%2B8</url>
+                <username>root</username>
+                <password>yrj961129</password>
+            </dataSource>
+        </connectionSource>
+        <!--这里设置日志级别为error-->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <!--  根logger，指定了STDOUT、FILE、ERROR_FILE3个引用 ，level="DEBUG"表示日志只会输入DEBUG级别以上的日志信息 -->
+    <root level="INFO">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="FILE" />
+        <appender-ref ref="ERROR_FILE" />
+        <appender-ref ref="DB-CLASSIC-MYSQL-POOL" />
+    </root>
+</configuration>
