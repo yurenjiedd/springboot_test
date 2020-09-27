@@ -10,7 +10,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
  * @Date: 2020/9/4 0:13
  */
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         AnnotationConfigApplicationContext applicationContext=new AnnotationConfigApplicationContext(SpringBootDemoApplication.class);
         TestBean testBean = (TestBean) applicationContext.getBean("tempFactoryBean");
         TestBean testBean1 = (TestBean) applicationContext.getBean("tempFactoryBean");
@@ -19,7 +19,10 @@ public class Main {
         System.err.println(testBean.hashCode()+" ----------- "+testBean1.hashCode());
 
         TempFactoryBean tempFactoryBean2 = (TempFactoryBean) applicationContext.getBean("&tempFactoryBean");
-        System.out.println("TempFactoryBean class:"+tempFactoryBean2.getClass());
+        System.out.println("TempFactoryBean class: == "+tempFactoryBean2.getClass());
 
+        TempFactoryBean tempFactoryBean = (TempFactoryBean) applicationContext.getBean("&tempFactoryBean");
+        Object object = tempFactoryBean.getObject();
+        System.out.println("object:"+object.toString());
     }
 }
