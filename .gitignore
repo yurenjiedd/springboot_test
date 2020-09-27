@@ -29,3 +29,12 @@ build/
 
 ### VS Code ###
 .vscode/
+
+/.mvn/
+/logs/
+
+src/main/java/com/yrj/spring_boot_demo/config/cache/
+src/main/java/com/yrj/spring_boot_demo/config/mq/
+src/main/java/com/yrj/spring_boot_demo/dao/
+src/main/java/com/yrj/spring_boot_demo/main/
+src/main/java/com/yrj/spring_boot_demo/model/po/

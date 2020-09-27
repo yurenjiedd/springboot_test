@@ -1,5 +1,6 @@
 package com.yrj.spring_boot_demo.test;
 
+import com.alibaba.fastjson.JSONArray;
 import com.yrj.spring_boot_demo.SpringBootDemoApplication;
 import com.yrj.spring_boot_demo.config.bean.TempFactoryBean;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -18,11 +19,11 @@ public class Main {
         testBean1.test001();
         System.err.println(testBean.hashCode()+" ----------- "+testBean1.hashCode());
 
-        TempFactoryBean tempFactoryBean2 = (TempFactoryBean) applicationContext.getBean("&tempFactoryBean");
-        System.out.println("TempFactoryBean class: == "+tempFactoryBean2.getClass());
-
         TempFactoryBean tempFactoryBean = (TempFactoryBean) applicationContext.getBean("&tempFactoryBean");
+        System.out.println("TempFactoryBean class:"+tempFactoryBean.getClass());
+
         Object object = tempFactoryBean.getObject();
-        System.out.println("object:"+object.toString());
+        System.err.println("object:"+ JSONArray.toJSONString(object));
+
     }
 }
