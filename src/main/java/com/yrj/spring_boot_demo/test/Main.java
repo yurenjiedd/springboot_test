@@ -19,6 +19,7 @@ public class Main {
         System.err.println(testBean.hashCode()+" ----------- "+testBean1.hashCode());
 
         TempFactoryBean tempFactoryBean2 = (TempFactoryBean) applicationContext.getBean("&tempFactoryBean");
-        System.out.println(tempFactoryBean2.getClass());
+        System.out.println("TempFactoryBean class:"+tempFactoryBean2.getClass());
+
     }
 }
